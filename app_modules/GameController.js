@@ -18,7 +18,7 @@ import GameOver from './GameOver';
 var GameController = React.createClass({
   getInitialState: function() {
     this.stats = new Stats();
-    return {secondsLeft: Config.time, curScore: 0, tiles: TileGenerator.generateTiles(), selected: []};
+    return {gameOver: false, secondsLeft: Config.time, curScore: 0, tiles: TileGenerator.generateTiles(), selected: []};
   },
   componentDidMount: function() {
     this.timer = setInterval(this.updateTime, 1000);
@@ -27,17 +27,16 @@ var GameController = React.createClass({
     clearInterval(this.timer);
   },
   updateTime: function() {
+    var that = this;
     if (this.state.secondsLeft > 1) {
       this.setState({secondsLeft: this.state.secondsLeft - 1});
     } else {
       clearInterval(this.timer);
-      this.setState({secondsLeft: 0});
       this.stats.sortMadeWordsByPts();
-      this.props.navigator.push({
-        component: GameOver,
-        title: 'Game Over',
-        passProps: {tiles: this.state.tiles, stats: this.stats}
-      });
+      this.setState({secondsLeft: 0});
+      setTimeout(function() {
+        that.setState({gameOver: true});
+      }, 200);
     }
   },
   onTilePress: function(tile) {
@@ -99,6 +98,10 @@ var GameController = React.createClass({
           <SubmitButton onPress={this.onWordSubmit}/>
           <Board tiles={this.state.tiles} selected={this.state.selected} onTilePress={this.onTilePress}/>
         </View>
+      );
+    } else {
+      return (
+        <GameOver navigator={this.props.navigator} tiles={this.state.tiles} stats={this.stats}></GameOver>
       );
     }
   }

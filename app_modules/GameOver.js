@@ -36,7 +36,10 @@ var GameOver = React.createClass({
   //points is max amount of points made with word, madePoints is amount of points player made
   renderRow: function(obj) {
     return (
-      <Text style={styles.row}>{obj.word} {obj.points} {obj.madePoints}</Text>
+      <View style={styles.row}>
+        <Text style={styles.left}>{obj.word} {obj.points}</Text>
+        <Text style={styles.right}>{obj.word} {obj.madePoints}</Text>
+      </View>
     );
   },
   render: function() {
@@ -45,10 +48,12 @@ var GameOver = React.createClass({
     } else {
       return (
         <View style={styles.container}>
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={this.renderRow}
-          style={styles.listView} />
+          <View style={styles.listView}>
+            <ListView
+              dataSource={this.state.dataSource}
+              renderRow={this.renderRow}
+              style={{}} />
+          </View>
         </View>
       );
     }
@@ -57,18 +62,17 @@ var GameOver = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    left: 15,
-    top: 15,
-    height: 200,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
   },
   listView: {
-    flex: 1,
+    width: 3*Config.screenWidth/4,
+    height: Config.screenHeight/2
   },
   row: {
-    alignSelf: 'center'
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   }
 });
 
