@@ -21,7 +21,7 @@ var HUD = React.createClass({
   render: function() {
     return (
       <View style={styles.hContainer}>
-        <Timer seconds={this.props.secondsLeft}></Timer>
+        <Timer timeHandler={this.props.timeHandler} secondsPassed={this.props.secondsPassed}></Timer>
         <Text numberOfLines={1} style={styles.currentWord}>{this.getCurrentWord()}</Text>
         <Score score={this.props.curScore}></Score>
       </View>

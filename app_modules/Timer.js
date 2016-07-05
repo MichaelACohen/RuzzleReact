@@ -3,17 +3,13 @@ import {
   StyleSheet,
   Text
 } from 'react-native';
+import TimeHandler from './../helper_modules/TimeHandler';
 
 var Timer = React.createClass({
   render: function() {
     return (
-        <Text numberOfLines={1} style={styles.timer}>{this.toTimeString()}</Text>
+        <Text numberOfLines={1} style={styles.timer}>{this.props.timeHandler.toString(this.props.secondsPassed)}</Text>
     );
-  },
-  toTimeString: function() {
-    var minutes = Math.floor(this.props.seconds/60);
-    var seconds = this.props.seconds % 60;
-    return minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
   }
 });
 

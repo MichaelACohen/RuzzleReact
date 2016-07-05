@@ -52,7 +52,7 @@ var GameOver = React.createClass({
             <ListView
               dataSource={this.state.dataSource}
               renderRow={this.renderRow}
-              style={{}} />
+              style={{marginLeft: 10, marginRight: 10}} />
           </View>
         </View>
       );
@@ -68,7 +68,9 @@ var styles = StyleSheet.create({
   },
   listView: {
     width: 3*Config.screenWidth/4,
-    height: Config.screenHeight/2
+    height: Config.screenHeight/2,
+    backgroundColor: 'blue',
+    borderRadius: 5
   },
   row: {
     flexDirection: 'row',

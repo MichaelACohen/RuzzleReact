@@ -10,6 +10,7 @@ import Utility from './../helper_modules/Utility';
 import Stats from './../helper_modules/Stats';
 import WordHandler from './../helper_modules/WordHandler';
 import TileGenerator from './../helper_modules/TileGenerator';
+import TimeHandler from './../helper_modules/TimeHandler';
 import HUD from './HUD';
 import SubmitButton from './SubmitButton';
 import Board from './Board';
@@ -18,7 +19,8 @@ import GameOver from './GameOver';
 var GameController = React.createClass({
   getInitialState: function() {
     this.stats = new Stats();
-    return {gameOver: false, secondsLeft: Config.time, curScore: 0, tiles: TileGenerator.generateTiles(), selected: []};
+    this.timeHandler = new TimeHandler.obj(TimeHandler.COUNTUP, 10);
+    return {gameOver: false, secondsPassed: 0, curScore: 0, tiles: TileGenerator.generateTiles(), selected: []};
   },
   componentDidMount: function() {
     this.timer = setInterval(this.updateTime, 1000);
@@ -27,16 +29,23 @@ var GameController = React.createClass({
     clearInterval(this.timer);
   },
   updateTime: function() {
-    var that = this;
-    if (this.state.secondsLeft > 1) {
-      this.setState({secondsLeft: this.state.secondsLeft - 1});
+    var secondsPassed = this.state.secondsPassed + 1;
+    this.setState({secondsPassed: secondsPassed});
+    if (this.timeHandler.isGameOver(secondsPassed)) {
+      this.setGameOver(200);
+    }
+  },
+  //can pass in delay if you don't want to switch to gameOver screen right away
+  setGameOver: function(delay) {
+    clearInterval(this.timer);
+    this.stats.sortMadeWordsByPts();
+    if (!delay) {
+      this.setState({gameOver: true});
     } else {
-      clearInterval(this.timer);
-      this.stats.sortMadeWordsByPts();
-      this.setState({secondsLeft: 0});
+      var that = this;
       setTimeout(function() {
         that.setState({gameOver: true});
-      }, 200);
+      }, delay);
     }
   },
   onTilePress: function(tile) {
@@ -94,7 +103,7 @@ var GameController = React.createClass({
     if (!this.state.gameOver) {
       return (
         <View style={[styles.container, styles.vContainer]}>
-          <HUD secondsLeft={this.state.secondsLeft} tiles={this.state.tiles} selected={this.state.selected} curScore={this.state.curScore}/>
+          <HUD timeHandler={this.timeHandler} secondsPassed={this.state.secondsPassed} tiles={this.state.tiles} selected={this.state.selected} curScore={this.state.curScore}/>
           <SubmitButton onPress={this.onWordSubmit}/>
           <Board tiles={this.state.tiles} selected={this.state.selected} onTilePress={this.onTilePress}/>
         </View>
