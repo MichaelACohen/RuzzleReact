@@ -13,7 +13,7 @@ var Board = React.createClass({
     var selected = this.props.selected;
     var tiles = this.props.tiles.map(function(tile) {
       var onPress = function() {
-        propPress(tile);
+        if (propPress) {propPress(tile);}
       };
       var isTileSelected = selected.indexOf(tile.id) != -1;
       return (

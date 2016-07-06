@@ -1,6 +1,7 @@
 //time type: play for a set amount of time
 //score type: play until you reach a particular score
 var TIME_TYPE = 0, SCORE_TYPE = 1;
+//val is the amount to reach before it's game over...is either seconds (time) or points (score)
 function GameHandler(type, val) {
   this.type = type;
   this.val = val;
