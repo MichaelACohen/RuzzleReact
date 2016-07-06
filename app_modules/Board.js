@@ -30,11 +30,11 @@ var Board = React.createClass({
       tileRows.push(tileRow);
     }
     var rows = tileRows.map(function(tileRow, i) {
-      var height = that.props.size/Config.boardSize - (Config.boardSize+1)*Config.space/2;
+      var height = that.props.size/Config.boardSize - (Config.boardSize-1)*Config.space/2;
       return <View key={i} style={{height: height, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'red'}}>{tileRow}</View>;
     });
     return (
-      <View style={{height: this.props.size}}>
+      <View style={{height: this.props.size, width: this.props.size, padding: Config.space}}>
         <View style={styles.board}>
           {rows}
         </View>
@@ -48,14 +48,12 @@ var styles = StyleSheet.create({
   board: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: 'blue',
-    padding: Config.space
+    backgroundColor: 'blue'
   },
   row: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: 'red'
+    justifyContent: 'space-around'
   },
   tile: {
 

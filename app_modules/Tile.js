@@ -8,7 +8,7 @@ import Config from './../config';
 
 var Tile = React.createClass({
   getStyle: function() {
-    var style = [styles.tile, {width: this.props.boardSize/Config.boardSize - (Config.boardSize+1)*Config.space/2}];
+    var style = [styles.tile, {width: this.props.boardSize/Config.boardSize - (Config.boardSize-1)*Config.space/2}];
     if (this.props.selected) style.push({backgroundColor: 'yellow'});
     return style;
    },

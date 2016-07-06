@@ -81,7 +81,7 @@ var GameOver = React.createClass({
               dataSource={this.state.dataSource}
               renderRow={this.renderRow}/>
           </View>
-          <Board tiles={this.props.tiles} selected={selected}/>
+          <Board size={Config.screenHeight/4} tiles={this.props.tiles} selected={selected}/>
         </View>
       );
     }
