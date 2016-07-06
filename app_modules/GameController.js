@@ -66,29 +66,36 @@ var GameController = React.createClass({
       }
     }
   },
-  onWordSubmit: function() {
+  getSelectedTiles: function() {
     var that = this;
     var tiles = this.state.selected.map(function(idx) {
       return that.state.tiles[idx];
     });
-    var word = tiles.map(function(tile) {
-      return tile.letter;
+    return tiles;
+  },
+  getSelectedWord: function() {
+    var that = this;
+    var word = this.state.selected.map(function(idx) {
+      return that.state.tiles[idx].letter;
     }).join('');
-    var curPoints = this.state.curScore;
-    console.log('curPoints: ' + curPoints);
+    return word;
+  },
+  onWordSubmit: function() {
+    var tiles = this.getSelectedTiles();
+    var word = this.getSelectedWord();
     var res = WordHandler.madeWordFromTiles(tiles);
     if (res == WordHandler.VALID) {
-      var points = Utility.getPointsFromTiles(tiles);
-      console.log('points from word: ' + points);
-      this.stats.madeWord(word, points);
-      this.increasePointsBy(points);
-      if (this.gameHandler.isGameOver({points: curPoints + points})) {
+      var curPoints = this.state.curScore;
+      var pointsFromWord = Utility.getPointsFromTiles(tiles);
+      this.stats.madeWord(word, pointsFromWord);
+      this.increasePointsBy(pointsFromWord);
+      if (this.gameHandler.isGameOver({points: curPoints + pointsFromWord})) {
         this.setGameOver();
       }
     } else if (res == WordHandler.ALREADY_USED) {
 
     } else { //res == WordHandler.NOT_WORD
-      that.stats.incorrectAttempt();
+      this.stats.incorrectAttempt();
     }
     this.setState({selected: []});
   },
@@ -115,12 +122,12 @@ var GameController = React.createClass({
         <View style={[styles.container, styles.vContainer]}>
           <HUD gameHandler={this.gameHandler} secondsPassed={this.state.secondsPassed} tiles={this.state.tiles} selected={this.state.selected} curScore={this.state.curScore}/>
           <SubmitButton onPress={this.onWordSubmit}/>
-          <Board tiles={this.state.tiles} selected={this.state.selected} onTilePress={this.onTilePress}/>
+          <Board size={Config.screenHeight/2} tiles={this.state.tiles} selected={this.state.selected} onTilePress={this.onTilePress}/>
         </View>
       );
     } else {
       return (
-        <GameOver navigator={this.props.navigator} tiles={this.state.tiles} stats={this.stats}></GameOver>
+        <GameOver navigator={this.props.navigator} tiles={this.state.tiles} stats={this.stats} score={this.state.curScore}></GameOver>
       );
     }
   }

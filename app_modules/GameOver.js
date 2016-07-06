@@ -35,8 +35,8 @@ var GameOver = React.createClass({
         var idx = madeWords.indexOf(obj.word);
         var madePoints = 0;
         if (idx != -1) madePoints = that.props.stats.madeWords[idx].points;
-        that.data.push({key: i, word: obj.word, points: obj.points, madePoints: madePoints, selected: i == 0, tiles: [0, 1, 2]});
-      });
+        that.data.push({key: i, tiles: obj.tiles, word: obj.word, points: obj.points, madePoints: madePoints, selected: i == 0});
+        });
       that.allWords = allWords;
       var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       that.setState({isLoading: false, dataSource: ds.cloneWithRows(that.data)});
@@ -67,21 +67,21 @@ var GameOver = React.createClass({
       </TouchableHighlight>
     );
   },
-  //TODO: NEED TO STYLE CONTAINER TO DISPLAY CHILDREN VIEWS BETTER
-  //TODO: NEED TO STYLE BOARD SO TILES ARE NOT ABSOLUTELY SIZED...SHOULD JUST SIZE TO FIT CONTAINER USING FLEXBOX FUNCTIONALITY
   render: function() {
     if (this.state.isLoading) {
       return <Text>{"Loading..."}</Text>;
     } else {
       var selected = this.data[this.state.selected].tiles;
+      console.log(selected);
       return (
         <View style={styles.container}>
+          <Text>{"TOTAL SCORE: " + this.props.score}</Text>
           <View style={styles.listView}>
             <ListView
               dataSource={this.state.dataSource}
-              renderRow={this.renderRow}
-              style={{}} />
+              renderRow={this.renderRow}/>
           </View>
+          <Board tiles={this.props.tiles} selected={selected}/>
         </View>
       );
     }
@@ -91,8 +91,9 @@ var GameOver = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 64,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'space-around'
   },
   listView: {
     width: 3*Config.screenWidth/4,

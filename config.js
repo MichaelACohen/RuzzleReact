@@ -5,8 +5,7 @@ import {
 var Window = Dimensions.get('window');
 var TIME = 5;
 var BOARD_SIZE = 4;
-var TILE_SPACE = 8;
-var TILE_SIZE = (Window.width - TILE_SPACE*(BOARD_SIZE+1)) / BOARD_SIZE
+var SPACE = 4;
 var LETTER_VALUES = {
   'A': 1,
   'B': 2,
@@ -39,9 +38,7 @@ var LETTER_VALUES = {
 module.exports = {
   screenWidth: Window.width,
   screenHeight: Window.height,
-  time: TIME,
   boardSize: BOARD_SIZE,
-  tileSpace: TILE_SPACE,
-  tileSize: TILE_SIZE,
+  space: SPACE,
   letterValues: LETTER_VALUES
 }

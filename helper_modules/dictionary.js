@@ -30,11 +30,11 @@ var isWord = function(word) {
 };
 
 var visited = [];
-var curWord = "";
+var curTiles = [];
 var allWords = []; //word and points
 //left to right, up to down
 var findWordsOnBoard = function(tiles) {
-  visited = []; curWord = ""; allWords = []; //clear values
+  visited = []; curTiles = []; allWords = []; //clear values
   for (var curIdx = 0; curIdx < tiles.length; curIdx++) {
     findWordsRec(tiles, curIdx);
   }
@@ -42,20 +42,23 @@ var findWordsOnBoard = function(tiles) {
 };
 var findWordsRec = function(tiles, curIdx) {
   if (visited.indexOf(curIdx) == -1) {
-    curWord += tiles[curIdx].letter;
+    curTiles.push(tiles[curIdx]);
     visited.push(curIdx);
+    var curWord = curTiles.map(function(tile) {
+      return tile.letter;
+    }).join('');
     var lowerCaseWord = curWord.toLowerCase();
     //recursion stops if there are no possible words that can be created from curWord
     if (dict.isValidPrefix(lowerCaseWord)) {
       if (dict.isWord(lowerCaseWord) && !alreadyFoundWord(curWord)) {
-        allWords.push({word: curWord, points: Utility.getPointsFromWord(curWord)});
+        allWords.push({tiles: curTiles.map(function(tile) {return tile.id}), word: curWord, points: Utility.getPointsFromWord(curWord)});
       }
       var adjTiles = Utility.getAdjacentTiles(curIdx);
       for (var i = 0; i < adjTiles.length; i++) {
         findWordsRec(tiles, adjTiles[i]);
       }
     }
-    curWord = curWord.substring(0, curWord.length - 1);
+    curTiles.pop();
     visited.pop();
   }
 }
