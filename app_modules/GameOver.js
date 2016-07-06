@@ -72,7 +72,6 @@ var GameOver = React.createClass({
       return <Text>{"Loading..."}</Text>;
     } else {
       var selected = this.data[this.state.selected].tiles;
-      console.log(selected);
       return (
         <View style={styles.container}>
           <Text>{"TOTAL SCORE: " + this.props.score}</Text>

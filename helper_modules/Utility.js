@@ -1,5 +1,8 @@
 import Config from './../config';
 
+var getTileXYFromIdx = function(idx) {
+  return {x: idx % Config.boardSize, y: Math.floor(idx / Config.boardSize)};
+}
 var getAdjacentTiles = function(idx) {
   var adjTiles = [];
   var x = idx % Config.boardSize;
@@ -36,6 +39,7 @@ var getPointsFromTiles = function(tiles) {
   return points;
 }
 module.exports = {
+  getTileXYFromIdx: getTileXYFromIdx,
   getAdjacentTiles: getAdjacentTiles,
   isAdjacent: isAdjacent,
   getPointsFromWord: getPointsFromWord,

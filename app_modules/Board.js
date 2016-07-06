@@ -38,7 +38,7 @@ var Board = React.createClass({
         <View style={styles.board}>
           {rows}
         </View>
-        <Connecters selected={selected}/>
+        <Connecters boardSize={this.props.size} selected={selected}/>
       </View>
     );
   }
