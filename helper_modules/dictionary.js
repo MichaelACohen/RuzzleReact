@@ -48,7 +48,7 @@ var findWordsRec = function(tiles, curIdx) {
     //recursion stops if there are no possible words that can be created from curWord
     if (dict.isValidPrefix(lowerCaseWord)) {
       if (dict.isWord(lowerCaseWord) && !alreadyFoundWord(curWord)) {
-        allWords.push({word: curWord, points: Utility.getPoints(curWord)});
+        allWords.push({word: curWord, points: Utility.getPointsFromWord(curWord)});
       }
       var adjTiles = Utility.getAdjacentTiles(curIdx);
       for (var i = 0; i < adjTiles.length; i++) {

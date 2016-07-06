@@ -20,7 +20,7 @@ var isAdjacent = function(idx, prevIdx) {
   var adjTiles = getAdjacentTiles(idx);
   return adjTiles.indexOf(prevIdx) != -1;
 }
-var getPoints = function(word) {
+var getPointsFromWord = function(word) {
   word = word.toUpperCase();
   var points = 0;
   word.split('').map(function(char) {
@@ -28,8 +28,16 @@ var getPoints = function(word) {
   });
   return points;
 }
+var getPointsFromTiles = function(tiles) {
+  var points = 0;
+  tiles.map(function(tile) {
+    points += Config.letterValues[tile.letter];
+  });
+  return points;
+}
 module.exports = {
   getAdjacentTiles: getAdjacentTiles,
   isAdjacent: isAdjacent,
-  getPoints: getPoints
+  getPointsFromWord: getPointsFromWord,
+  getPointsFromTiles: getPointsFromTiles
 };

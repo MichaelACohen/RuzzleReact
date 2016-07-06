@@ -10,16 +10,18 @@ import Utility from './../helper_modules/Utility';
 import Stats from './../helper_modules/Stats';
 import WordHandler from './../helper_modules/WordHandler';
 import TileGenerator from './../helper_modules/TileGenerator';
-import TimeHandler from './../helper_modules/TimeHandler';
+import GameHandler from './../helper_modules/GameHandler';
 import HUD from './HUD';
 import SubmitButton from './SubmitButton';
 import Board from './Board';
 import GameOver from './GameOver';
 
+//TODO: make score handler similar to time handler...can handle different game modes
+//TODO: after that, probably combine those two classes into game handler?
 var GameController = React.createClass({
   getInitialState: function() {
     this.stats = new Stats();
-    this.timeHandler = new TimeHandler.obj(TimeHandler.COUNTUP, 10);
+    this.gameHandler = new GameHandler.obj(GameHandler.types.SCORE_TYPE, 10);
     return {gameOver: false, secondsPassed: 0, curScore: 0, tiles: TileGenerator.generateTiles(), selected: []};
   },
   componentDidMount: function() {
@@ -31,7 +33,7 @@ var GameController = React.createClass({
   updateTime: function() {
     var secondsPassed = this.state.secondsPassed + 1;
     this.setState({secondsPassed: secondsPassed});
-    if (this.timeHandler.isGameOver(secondsPassed)) {
+    if (this.gameHandler.isGameOver({seconds: secondsPassed})) {
       this.setGameOver(200);
     }
   },
@@ -65,16 +67,24 @@ var GameController = React.createClass({
     }
   },
   onWordSubmit: function() {
-    var selected = this.state.selected;
     var that = this;
-    var word = selected.map(function(idx) {
-      return that.state.tiles[idx].letter;
+    var tiles = this.state.selected.map(function(idx) {
+      return that.state.tiles[idx];
+    });
+    var word = tiles.map(function(tile) {
+      return tile.letter;
     }).join('');
-    var res = WordHandler.madeWord(word);
+    var curPoints = this.state.curScore;
+    console.log('curPoints: ' + curPoints);
+    var res = WordHandler.madeWordFromTiles(tiles);
     if (res == WordHandler.VALID) {
-      var points = Utility.getPoints(word);
-      that.stats.madeWord(word, points);
-      that.increasePointsBy(points);
+      var points = Utility.getPointsFromTiles(tiles);
+      console.log('points from word: ' + points);
+      this.stats.madeWord(word, points);
+      this.increasePointsBy(points);
+      if (this.gameHandler.isGameOver({points: curPoints + points})) {
+        this.setGameOver();
+      }
     } else if (res == WordHandler.ALREADY_USED) {
 
     } else { //res == WordHandler.NOT_WORD
@@ -103,7 +113,7 @@ var GameController = React.createClass({
     if (!this.state.gameOver) {
       return (
         <View style={[styles.container, styles.vContainer]}>
-          <HUD timeHandler={this.timeHandler} secondsPassed={this.state.secondsPassed} tiles={this.state.tiles} selected={this.state.selected} curScore={this.state.curScore}/>
+          <HUD gameHandler={this.gameHandler} secondsPassed={this.state.secondsPassed} tiles={this.state.tiles} selected={this.state.selected} curScore={this.state.curScore}/>
           <SubmitButton onPress={this.onWordSubmit}/>
           <Board tiles={this.state.tiles} selected={this.state.selected} onTilePress={this.onTilePress}/>
         </View>

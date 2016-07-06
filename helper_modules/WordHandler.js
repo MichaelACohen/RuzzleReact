@@ -11,8 +11,16 @@ var madeWord = function(word) {
   return VALID;
 };
 
+var madeWordFromTiles = function(tiles) {
+  var word = tiles.map(function(tile) {
+    return tile.letter;
+  }).join('');
+  return madeWord(word);
+}
+
 module.exports = {
   madeWord: madeWord,
+  madeWordFromTiles: madeWordFromTiles,
   ALREADY_USED: ALREADY_USED,
   VALID: VALID,
   NOT_WORD: NOT_WORD
