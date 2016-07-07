@@ -10,16 +10,16 @@ import Connecter from './Connecter';
 
 var Connecters = React.createClass({
   getInitialState: function() {
-    this.tileSize = this.props.boardSize/Config.boardSize - (Config.boardSize-1)*Config.space/2;
+    this.tileSize = (this.props.boardSize - (Config.boardSize+1)*this.props.boardSpace)/Config.boardSize;
     return {};
   },
   //this will bring you to the leftmost point of the given column
   getStartX: function(colIdx) {
-    return Config.space + (this.tileSize + Config.space)*colIdx
+    return this.props.boardSpace + (this.tileSize + this.props.boardSpace)*colIdx
   },
   //this will bring you to the topmost point of the given row
   getStartY: function(rowIdx) {
-    return Config.space + (this.tileSize + Config.space)*rowIdx;
+    return this.props.boardSpace + (this.tileSize + this.props.boardSpace)*rowIdx;
   },
   getEndPointsFromIndices: function(fromIdx, toIdx) {
     var startTilePos = Utility.getTileXYFromIdx(fromIdx);

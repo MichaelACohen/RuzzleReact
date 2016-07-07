@@ -25,20 +25,20 @@ var Board = React.createClass({
             if (propPress) {propPress(thisTile);}
           }
         })();
-        tileRow.push(<Tile style={styles.tile} key={idx} letter={tile.letter} selected={isTileSelected} onPress={onPress} boardSize={this.props.size} fontSize={this.props.size/15}/>);
+        tileRow.push(<Tile style={styles.tile} key={idx} letter={tile.letter} selected={isTileSelected} onPress={onPress} boardSize={this.props.size} boardSpace={this.props.space} fontSize={this.props.size/15}/>);
       }
       tileRows.push(tileRow);
     }
     var rows = tileRows.map(function(tileRow, i) {
-      var height = that.props.size/Config.boardSize - (Config.boardSize-1)*Config.space/2;
-      return <View key={i} style={{height: height, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'red'}}>{tileRow}</View>;
+      var height = (that.props.size - (Config.boardSize+1)*that.props.space)/Config.boardSize;
+      return <View key={i} style={{height: height, flexDirection: 'row', justifyContent: 'space-between'}}>{tileRow}</View>;
     });
     return (
-      <View style={{height: this.props.size, width: this.props.size, padding: Config.space}}>
-        <View style={styles.board}>
+      <View style={{padding: this.props.space}}>
+        <View style={[styles.board, {height: this.props.size - 2*this.props.space, width: this.props.size - 2*this.props.space}]}>
           {rows}
         </View>
-        <Connecters boardSize={this.props.size} selected={selected}/>
+        <Connecters boardSize={this.props.size} boardSpace={this.props.space} selected={selected}/>
       </View>
     );
   }
@@ -46,9 +46,8 @@ var Board = React.createClass({
 
 var styles = StyleSheet.create({
   board: {
-    flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: 'blue'
+    backgroundColor: 'black'
   },
   row: {
     flex: 1,
