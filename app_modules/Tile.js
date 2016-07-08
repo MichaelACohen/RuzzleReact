@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleSheet,
   Text,
-  TouchableHighlight
+  TouchableOpacity
 } from 'react-native';
 import Config from './../config';
 
@@ -14,9 +14,9 @@ var Tile = React.createClass({
    },
   render: function() {
     return (
-      <TouchableHighlight style={this.getStyle()} onPress={this.props.onPress.bind(this)}>
-        <Text style={{color: 'white', fontSize: this.props.fontSize}}>{this.props.letter}</Text>
-      </TouchableHighlight>
+      <TouchableOpacity activeOpacity={0.6} style={this.getStyle()} onPress={this.props.onPress.bind(this)}>
+        <Text style={{color: 'black', fontWeight: 'bold', fontSize: this.props.fontSize}}>{this.props.letter}</Text>
+      </TouchableOpacity>
     );
   }
 });

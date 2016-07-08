@@ -71,16 +71,27 @@ var GameOver = React.createClass({
     if (this.state.isLoading) {
       return <Text>{"Loading..."}</Text>;
     } else {
-      var selected = this.data[this.state.selected].tiles;
+      var selectedData = this.data[this.state.selected];
       return (
         <View style={styles.container}>
-          <Text>{"TOTAL SCORE: " + this.props.score}</Text>
-          <View style={styles.listView}>
-            <ListView
-              dataSource={this.state.dataSource}
-              renderRow={this.renderRow}/>
+          <View style={styles.textContainer}>
+            <Text>{"TOTAL SCORE: " + this.props.score}</Text>
           </View>
-          <Board size={Config.screenHeight/4} space={2} tiles={this.props.tiles} selected={selected}/>
+          <View style={styles.listViewContainer}>
+            <View style={styles.listView}>
+              <ListView
+                dataSource={this.state.dataSource}
+                renderRow={this.renderRow}/>
+            </View>
+          </View>
+          <View style={styles.bottomContainer}>
+            <View style={styles.bottomDetailContainer}>
+              <Text style={{color: 'white'}}>{selectedData.word}: {selectedData.points}</Text>
+            </View>
+            <View style={styles.boardContainer}>
+              <Board size={Config.screenHeight/4} space={5} tiles={this.props.tiles} selected={selectedData.tiles}/>
+            </View>
+          </View>
         </View>
       );
     }
@@ -91,8 +102,13 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 64,
-    alignItems: 'center',
     justifyContent: 'space-around'
+  },
+  textContainer: {
+    alignItems: 'center'
+  },
+  listViewContainer: {
+    alignItems: 'center'
   },
   listView: {
     width: 3*Config.screenWidth/4,
@@ -109,6 +125,21 @@ var styles = StyleSheet.create({
   },
   highlighted: {
     backgroundColor: 'red'
+  },
+  bottomContainer: {
+    height: Config.screenHeight/4 + 10,
+    backgroundColor: 'red',
+    flexDirection: 'row'
+  },
+  bottomDetailContainer: {
+    flex: 1,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  boardContainer: {
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 

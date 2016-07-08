@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleSheet,
   Text,
-  TouchableHighlight
+  TouchableOpacity
 } from 'react-native';
 
 import Config from './../config';
@@ -10,24 +10,24 @@ import Config from './../config';
 var SubmitButton = React.createClass({
   render: function() {
     return (
-      <TouchableHighlight style={styles.button} onPress={this.props.onPress}>
+      <TouchableOpacity activeOpacity={0.4} style={styles.button} onPress={this.props.onPress}>
         <Text style={styles.text}>{'Submit Word'}</Text>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 });
 
 var styles = StyleSheet.create({
   button: {
-    backgroundColor: 'black',
+    backgroundColor: 'yellow',
     justifyContent: 'center',
     alignItems: 'center',
     width: Config.screenWidth,
     height: 50
   },
   text: {
-    color: 'white',
-    fontSize: 100/(Config.boardSize + 1),
+    color: 'black',
+    fontSize: 20,
     fontWeight: 'bold'
   }
 });

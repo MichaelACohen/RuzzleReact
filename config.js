@@ -4,7 +4,7 @@ import {
 
 var Window = Dimensions.get('window');
 var TIME = 5;
-var BOARD_SIZE = 4;
+var BOARD_SIZE = 8;
 var SPACE = 6;
 var LETTER_VALUES = {
   'A': 1,
