@@ -61,8 +61,8 @@ var GameOver = React.createClass({
         style={obj.key == this.state.selected ? styles.highlighted : null}
         onPress={this.onPress(obj.key)}>
         <View style={styles.row}>
-          <Text style={styles.left}>{obj.word} {obj.points}</Text>
-          <Text style={styles.right}>{obj.word} {obj.madePoints}</Text>
+          <Text style={obj.madePoints == 0 ? styles.left : [styles.left, styles.made]}>{obj.word} {obj.points}</Text>
+          <Text style={obj.madePoints == 0 ? styles.right : [styles.right, styles.made]}>{obj.word} {obj.madePoints}</Text>
         </View>
       </TouchableHighlight>
     );
@@ -77,11 +77,19 @@ var GameOver = React.createClass({
           <View style={styles.textContainer}>
             <Text>{"TOTAL SCORE: " + this.props.score}</Text>
           </View>
-          <View style={styles.listViewContainer}>
-            <View style={styles.listView}>
-              <ListView
-                dataSource={this.state.dataSource}
-                renderRow={this.renderRow}/>
+          <View style={styles.centerWrapper}>
+            <View style={styles.centerContainer}>
+              <View style={styles.listViewHeader}>
+                <Text>All words</Text>
+                <Text>Your words</Text>
+              </View>
+              <View style={styles.listViewContainer}>
+                <View style={styles.listView}>
+                  <ListView
+                    dataSource={this.state.dataSource}
+                    renderRow={this.renderRow}/>
+                </View>
+              </View>
             </View>
           </View>
           <View style={styles.bottomContainer}>
@@ -89,7 +97,7 @@ var GameOver = React.createClass({
               <Text style={{color: 'white'}}>{selectedData.word}: {selectedData.points}</Text>
             </View>
             <View style={styles.boardContainer}>
-              <Board size={Config.screenHeight/4} space={5} tiles={this.props.tiles} selected={selectedData.tiles}/>
+              <Board size={Config.screenHeight/4} space={Config.boardSize <= 5 ? 12 - 2*Config.boardSize : 2} tiles={this.props.tiles} selected={selectedData.tiles}/>
             </View>
           </View>
         </View>
@@ -107,8 +115,21 @@ var styles = StyleSheet.create({
   textContainer: {
     alignItems: 'center'
   },
-  listViewContainer: {
+  centerWrapper: {
     alignItems: 'center'
+  },
+  centerContainer: {
+    width: 3*Config.screenWidth/4,
+    height: Config.screenHeight/2
+  },
+  listViewContainer: {
+    alignItems: 'center',
+  },
+  listViewHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginLeft: 10,
+    marginRight: 10
   },
   listView: {
     width: 3*Config.screenWidth/4,
@@ -125,6 +146,10 @@ var styles = StyleSheet.create({
   },
   highlighted: {
     backgroundColor: 'red'
+  },
+  made: {
+    fontWeight: 'bold',
+    fontStyle: 'italic'
   },
   bottomContainer: {
     height: Config.screenHeight/4 + 10,

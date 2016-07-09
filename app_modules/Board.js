@@ -25,7 +25,7 @@ var Board = React.createClass({
             if (propPress) {propPress(thisTile);}
           }
         })();
-        tileRow.push(<Tile style={styles.tile} key={idx} letter={tile.letter} selected={isTileSelected} onPress={onPress} boardSize={this.props.size} boardSpace={this.props.space} fontSize={this.props.size/15}/>);
+        tileRow.push(<Tile style={styles.tile} key={idx} letter={tile.letter} selected={isTileSelected} onPress={onPress} boardSize={this.props.size} boardSpace={this.props.space} fontSize={this.props.size/(2*Config.boardSize)}/>);
       }
       tileRows.push(tileRow);
     }

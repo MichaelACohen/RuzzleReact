@@ -122,7 +122,7 @@ var GameController = React.createClass({
         <View style={[styles.container, styles.vContainer]}>
           <HUD gameHandler={this.gameHandler} secondsPassed={this.state.secondsPassed} tiles={this.state.tiles} selected={this.state.selected} curScore={this.state.curScore}/>
           <SubmitButton onPress={this.onWordSubmit}/>
-          <Board size={Config.screenWidth} space={10} tiles={this.state.tiles} selected={this.state.selected} onTilePress={this.onTilePress}/>
+          <Board size={Config.screenWidth} space={Config.boardSize <= 10 ? 24 - 2*Config.boardSize : 4} tiles={this.state.tiles} selected={this.state.selected} onTilePress={this.onTilePress}/>
           <View style={{flex: 1, backgroundColor: 'black'}}></View>
         </View>
       );
