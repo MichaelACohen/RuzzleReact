@@ -12,6 +12,7 @@ class Ruzzle extends Component {
   render() {
     return (
       <NavigatorIOS
+        itemWrapperStyle={{flex: 1, marginTop: 64}}
         style={{flex: 1}}
         initialRoute={{
           component: MainMenu,

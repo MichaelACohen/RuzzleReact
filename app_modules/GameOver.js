@@ -3,21 +3,14 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   ListView
 } from 'react-native';
 import Dictionary from './../helper_modules/dictionary';
 import Config from './../config';
 import Board from './Board';
+import LoadingScreen from './LoadingScreen';
 
-//TODO
-/*
-  1) title: Total Score: xxx
-  2) ListView of all words
-    a) start with top row highlighted
-    b) can click to highlight a different row
-  3) Small board showing the selected tiles of the row that is highlighted
-*/
 var GameOver = React.createClass({
   getInitialState: function() {
     this.data = [];
@@ -40,7 +33,7 @@ var GameOver = React.createClass({
       that.allWords = allWords;
       var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       that.setState({isLoading: false, dataSource: ds.cloneWithRows(that.data)});
-    }, 1); //without this, the "Loading..." doesn't show up
+    }, 100); //without this, the "Loading..." doesn't show up
   },
   onPress: function(idx) {
     var that = this;
@@ -56,32 +49,37 @@ var GameOver = React.createClass({
   //obj has 3 properties: word, points, madePoints
   //points is max amount of points made with word, madePoints is amount of points player made
   renderRow: function(obj) {
+    var style = [];
+    if (obj.key == this.state.selected) style.push(styles.highlighted);
+    if (obj.madePoints != 0) style.push(styles.madeRow);
     return (
-      <TouchableHighlight
-        style={obj.key == this.state.selected ? styles.highlighted : null}
+      <TouchableOpacity
+        activeOpacity={0.6}
+        style={style}
         onPress={this.onPress(obj.key)}>
         <View style={styles.row}>
-          <Text style={obj.madePoints == 0 ? styles.left : [styles.left, styles.made]}>{obj.word} {obj.points}</Text>
-          <Text style={obj.madePoints == 0 ? styles.right : [styles.right, styles.made]}>{obj.word} {obj.madePoints}</Text>
+          <Text style={obj.madePoints == 0 ? styles.listText : [styles.listText, styles.made]}>{obj.word} {obj.points}</Text>
+          <Text style={obj.madePoints == 0 ? styles.listText : [styles.listText, styles.made]}>{obj.word} {obj.madePoints}</Text>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   },
   render: function() {
     if (this.state.isLoading) {
-      return <Text>{"Loading..."}</Text>;
+      return <LoadingScreen/>;
     } else {
       var selectedData = this.data[this.state.selected];
       return (
         <View style={styles.container}>
           <View style={styles.textContainer}>
-            <Text>{"TOTAL SCORE: " + this.props.score}</Text>
+            <Text style={styles.text}>{"YOUR SCORE: " + this.props.score}</Text>
+            <Text style={styles.subText}>{"Made words: " + this.props.stats.madeWords.length + "/" + this.data.length}</Text>
           </View>
           <View style={styles.centerWrapper}>
             <View style={styles.centerContainer}>
               <View style={styles.listViewHeader}>
-                <Text>All words</Text>
-                <Text>Your words</Text>
+                <Text style={{fontWeight: 'bold'}}>All words</Text>
+                <Text style={{fontWeight: 'bold'}}>Your words</Text>
               </View>
               <View style={styles.listViewContainer}>
                 <View style={styles.listView}>
@@ -94,7 +92,8 @@ var GameOver = React.createClass({
           </View>
           <View style={styles.bottomContainer}>
             <View style={styles.bottomDetailContainer}>
-              <Text style={{color: 'white'}}>{selectedData.word}: {selectedData.points}</Text>
+              <Text numberOfLines={1} style={{color: 'white'}}>{selectedData.madePoints == 0 ? "" : "You made this word!"}</Text>
+              <Text style={{color: 'white'}}>{selectedData.word}: {selectedData.points} points</Text>
             </View>
             <View style={styles.boardContainer}>
               <Board size={Config.screenHeight/4} space={Config.boardSize <= 5 ? 12 - 2*Config.boardSize : 2} tiles={this.props.tiles} selected={selectedData.tiles}/>
@@ -109,11 +108,18 @@ var GameOver = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 64,
-    justifyContent: 'space-around'
+    justifyContent: 'space-between'
   },
   textContainer: {
+    paddingTop: 5,
     alignItems: 'center'
+  },
+  text: {
+    fontWeight: 'bold',
+    fontSize: 24
+  },
+  subText: {
+    fontWeight: 'bold'
   },
   centerWrapper: {
     alignItems: 'center'
@@ -136,7 +142,9 @@ var styles = StyleSheet.create({
     height: Config.screenHeight/2,
     backgroundColor: 'blue',
     borderRadius: 5,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: 'black'
   },
   row: {
     flexDirection: 'row',
@@ -144,21 +152,27 @@ var styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10
   },
+  madeRow: {
+
+  },
   highlighted: {
-    backgroundColor: 'red'
+    backgroundColor: 'rgba(255, 255, 0, 0.75)'
   },
   made: {
+    color: 'white',
     fontWeight: 'bold',
-    fontStyle: 'italic'
+    opacity: 1
+  },
+  listText: {
+    color: 'black'
   },
   bottomContainer: {
-    height: Config.screenHeight/4 + 10,
-    backgroundColor: 'red',
+    height: Config.screenHeight/4,
+    backgroundColor: 'black',
     flexDirection: 'row'
   },
   bottomDetailContainer: {
     flex: 1,
-    backgroundColor: 'black',
     justifyContent: 'center',
     alignItems: 'center'
   },

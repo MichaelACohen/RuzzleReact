@@ -16,13 +16,11 @@ import SubmitButton from './SubmitButton';
 import Board from './Board';
 import GameOver from './GameOver';
 
-//TODO: make score handler similar to time handler...can handle different game modes
-//TODO: after that, probably combine those two classes into game handler?
 var GameController = React.createClass({
   getInitialState: function() {
     this.stats = new Stats();
-    this.gameHandler = new GameHandler.obj(GameHandler.types.SCORE_TYPE, 10);
-    return {gameOver: false, secondsPassed: 0, curScore: 0, tiles: TileGenerator.generateTiles(), selected: []};
+    this.gameHandler = this.props.gameHandler;
+    return {gameOver: false, secondsPassed: 0, curScore: 0, tiles: this.props.tiles, selected: []};
   },
   componentDidMount: function() {
     this.timer = setInterval(this.updateTime, 1000);
@@ -136,7 +134,6 @@ var GameController = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    paddingTop: 44,
     flex: 1
   },
   vContainer: {
