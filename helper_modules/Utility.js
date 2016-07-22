@@ -1,26 +1,26 @@
 import Config from './../config';
 
-var getTileXYFromIdx = function(idx) {
-  return {x: idx % Config.boardSize, y: Math.floor(idx / Config.boardSize)};
+var getTileXYFromIdx = function(idx, boardSize) {
+  return {x: idx % boardSize, y: Math.floor(idx / boardSize)};
 }
-var getAdjacentTiles = function(idx) {
+var getAdjacentTiles = function(idx, boardSize) {
   var adjTiles = [];
-  var x = idx % Config.boardSize;
-  var y = Math.floor(idx / Config.boardSize);
+  var x = idx % boardSize;
+  var y = Math.floor(idx / boardSize);
   var startX = x == 0 ? x : x-1;
-  var endX = x == Config.boardSize - 1 ? x : x+1;
+  var endX = x == boardSize - 1 ? x : x+1;
   var startY = y == 0 ? y : y-1;
-  var endY = y == Config.boardSize - 1 ? y : y+1;
+  var endY = y == boardSize - 1 ? y : y+1;
   for (var i = startX; i <= endX; i++) {
     for (var j = startY; j <= endY; j++) {
-      var curIdx = i + Config.boardSize*j;
+      var curIdx = i + boardSize*j;
       if (curIdx != idx) adjTiles.push(curIdx);
     }
   }
   return adjTiles;
 }
-var isAdjacent = function(idx, prevIdx) {
-  var adjTiles = getAdjacentTiles(idx);
+var isAdjacent = function(idx, prevIdx, boardSize) {
+  var adjTiles = getAdjacentTiles(idx, boardSize);
   return adjTiles.indexOf(prevIdx) != -1;
 }
 var getPointsFromWord = function(word) {

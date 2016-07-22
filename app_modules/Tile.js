@@ -4,11 +4,10 @@ import {
   Text,
   TouchableOpacity
 } from 'react-native';
-import Config from './../config';
 
 var Tile = React.createClass({
   getStyle: function() {
-    var style = [styles.tile, {width: (this.props.boardSize - (Config.boardSize+1)*this.props.boardSpace)/Config.boardSize}];
+    var style = [styles.tile, {width: (this.props.boardPxSize - (this.props.boardSize+1)*this.props.boardSpace)/this.props.boardSize}];
     if (this.props.selected) style.push({backgroundColor: 'yellow'});
     return style;
    },

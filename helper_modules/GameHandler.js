@@ -1,6 +1,9 @@
 //time type: play for a set amount of time
 //score type: play until you reach a particular score
 var TIME_TYPE = 0, SCORE_TYPE = 1;
+var TIME_DEFAULT = 120, SCORE_DEFAULT = 100;
+var TIME_MIN = 10, SCORE_MIN = 10;
+var TIME_MAX = 600, SCORE_MAX = 250;
 //val is the amount to reach before it's game over...is either seconds (time) or points (score)
 function GameHandler(type, val) {
   this.type = type;
@@ -32,8 +35,9 @@ var secondsToTimeString = function(seconds) {
 
 module.exports = {
   obj: GameHandler,
-  types: {
-    TIME_TYPE: TIME_TYPE,
-    SCORE_TYPE: SCORE_TYPE
-  }
+  TIME_TYPE: TIME_TYPE,
+  SCORE_TYPE: SCORE_TYPE,
+  defaults: [TIME_DEFAULT, SCORE_DEFAULT],
+  mins: [TIME_MIN, SCORE_MIN],
+  maxs: [TIME_MAX, SCORE_MAX]
 };

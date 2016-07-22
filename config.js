@@ -4,7 +4,9 @@ import {
 
 var Window = Dimensions.get('window');
 var TIME = 5;
-var BOARD_SIZE = 4;
+var DEFAULT_BOARD_SIZE = 4;
+var MIN_BOARD_SIZE = 3;
+var MAX_BOARD_SIZE = 10;
 var SPACE = 6;
 var LETTER_VALUES = {
   'A': 1,
@@ -38,7 +40,11 @@ var LETTER_VALUES = {
 module.exports = {
   screenWidth: Window.width,
   screenHeight: Window.height,
-  boardSize: BOARD_SIZE,
+  boardSize: {
+    default: DEFAULT_BOARD_SIZE,
+    min: MIN_BOARD_SIZE,
+    max: MAX_BOARD_SIZE
+  },
   space: SPACE,
   letterValues: LETTER_VALUES
 }

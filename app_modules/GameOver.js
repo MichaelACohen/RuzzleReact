@@ -19,7 +19,7 @@ var GameOver = React.createClass({
   componentDidMount: function() {
     var that = this;
     setTimeout(function() {
-      var allWords = Dictionary.findWordsOnBoard(that.props.tiles);
+      var allWords = Dictionary.findWordsOnBoard(that.props.tiles, that.props.boardSize);
       allWords.sort(function(obj1, obj2) {
         return obj2.points - obj1.points;
       });
@@ -69,17 +69,21 @@ var GameOver = React.createClass({
       return <LoadingScreen/>;
     } else {
       var selectedData = this.data[this.state.selected];
+      var totalPts = 0;
+      this.data.map(function(obj) {
+          totalPts += obj.points;
+      });
       return (
         <View style={styles.container}>
           <View style={styles.textContainer}>
             <Text style={styles.text}>{"YOUR SCORE: " + this.props.score}</Text>
-            <Text style={styles.subText}>{"Made words: " + this.props.stats.madeWords.length + "/" + this.data.length}</Text>
+            <Text style={styles.subText}>{"Maximum Score: " + totalPts}</Text>
           </View>
           <View style={styles.centerWrapper}>
             <View style={styles.centerContainer}>
               <View style={styles.listViewHeader}>
-                <Text style={{fontWeight: 'bold'}}>All words</Text>
-                <Text style={{fontWeight: 'bold'}}>Your words</Text>
+                <Text style={{fontWeight: 'bold'}}>{'All words (' + this.data.length + ')'}</Text>
+                <Text style={{fontWeight: 'bold'}}>{'Your words (' + this.props.stats.madeWords.length + ')'}</Text>
               </View>
               <View style={styles.listViewContainer}>
                 <View style={styles.listView}>
@@ -96,7 +100,7 @@ var GameOver = React.createClass({
               <Text style={{color: 'white'}}>{selectedData.word}: {selectedData.points} points</Text>
             </View>
             <View style={styles.boardContainer}>
-              <Board size={Config.screenHeight/4} space={Config.boardSize <= 5 ? 12 - 2*Config.boardSize : 2} tiles={this.props.tiles} selected={selectedData.tiles}/>
+              <Board pxSize={Config.screenHeight/4} boardSize={this.props.boardSize} space={this.props.boardSize <= 5 ? 12 - 2*this.props.boardSize : 2} tiles={this.props.tiles} selected={selectedData.tiles}/>
             </View>
           </View>
         </View>

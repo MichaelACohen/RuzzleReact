@@ -19,6 +19,7 @@ import GameOver from './GameOver';
 var GameController = React.createClass({
   getInitialState: function() {
     this.stats = new Stats();
+    this.boardSize = this.props.boardSize;
     this.gameHandler = this.props.gameHandler;
     return {gameOver: false, secondsPassed: 0, curScore: 0, tiles: this.props.tiles, selected: []};
   },
@@ -55,7 +56,7 @@ var GameController = React.createClass({
       this.setState({selected: selected});
     } else {
       var prevTileId = this.state.tiles[selected[selected.length-1]].id;
-      if (Utility.isAdjacent(tile.id, prevTileId)) { //if tile is adjacent to prev tile
+      if (Utility.isAdjacent(tile.id, prevTileId, this.boardSize)) { //if tile is adjacent to prev tile
         var idx = selected.indexOf(tile.id);
         if (idx == -1) { //tile must not be already selected
           selected.push(tile.id);
@@ -120,13 +121,13 @@ var GameController = React.createClass({
         <View style={[styles.container, styles.vContainer]}>
           <HUD gameHandler={this.gameHandler} secondsPassed={this.state.secondsPassed} tiles={this.state.tiles} selected={this.state.selected} curScore={this.state.curScore}/>
           <SubmitButton onPress={this.onWordSubmit}/>
-          <Board size={Config.screenWidth} space={Config.boardSize <= 10 ? 24 - 2*Config.boardSize : 4} tiles={this.state.tiles} selected={this.state.selected} onTilePress={this.onTilePress}/>
+          <Board pxSize={Config.screenWidth} boardSize={this.boardSize} space={this.boardSize <= 10 ? 24 - 2*this.boardSize : 4} tiles={this.state.tiles} selected={this.state.selected} onTilePress={this.onTilePress}/>
           <View style={{flex: 1, backgroundColor: 'black'}}></View>
         </View>
       );
     } else {
       return (
-        <GameOver navigator={this.props.navigator} tiles={this.state.tiles} stats={this.stats} score={this.state.curScore}></GameOver>
+        <GameOver navigator={this.props.navigator} boardSize={this.boardSize} tiles={this.state.tiles} stats={this.stats} score={this.state.curScore}></GameOver>
       );
     }
   }

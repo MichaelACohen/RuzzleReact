@@ -33,14 +33,14 @@ var visited = [];
 var curTiles = [];
 var allWords = []; //word and points
 //left to right, up to down
-var findWordsOnBoard = function(tiles) {
+var findWordsOnBoard = function(tiles, boardSize) {
   visited = []; curTiles = []; allWords = []; //clear values
   for (var curIdx = 0; curIdx < tiles.length; curIdx++) {
-    findWordsRec(tiles, curIdx);
+    findWordsRec(tiles, curIdx, boardSize);
   }
   return allWords;
 };
-var findWordsRec = function(tiles, curIdx) {
+var findWordsRec = function(tiles, curIdx, boardSize) {
   if (visited.indexOf(curIdx) == -1) {
     curTiles.push(tiles[curIdx]);
     visited.push(curIdx);
@@ -53,9 +53,9 @@ var findWordsRec = function(tiles, curIdx) {
       if (dict.isWord(lowerCaseWord) && !alreadyFoundWord(curWord)) {
         allWords.push({tiles: curTiles.map(function(tile) {return tile.id}), word: curWord, points: Utility.getPointsFromWord(curWord)});
       }
-      var adjTiles = Utility.getAdjacentTiles(curIdx);
+      var adjTiles = Utility.getAdjacentTiles(curIdx, boardSize);
       for (var i = 0; i < adjTiles.length; i++) {
-        findWordsRec(tiles, adjTiles[i]);
+        findWordsRec(tiles, adjTiles[i], boardSize);
       }
     }
     curTiles.pop();

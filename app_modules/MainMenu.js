@@ -1,11 +1,15 @@
 import React from 'react';
 import {
+  Alert,
+  SegmentedControlIOS,
+  TextInput,
   Text,
   View,
   TouchableOpacity,
   StyleSheet
 } from 'react-native';
 
+import Config from './../config';
 import Dictionary from './../helper_modules/dictionary';
 import GameHandler from './../helper_modules/GameHandler';
 import LoadingScreen from './LoadingScreen';
@@ -14,31 +18,66 @@ import TileGenerator from './../helper_modules/TileGenerator';
 
 var BEFORE = 0, LOADING = 1, SUCCESS = 2, FAILED = 3;
 
-//TODO: start with only game type selector visible (Score type or Time type)
-//TODO: after user clicks an option, show "Stop game after ___ seconds" or "Stop game after you score ____ points"
-//TODO: after clicking this, then "play" button can be clicked
 var MainMenu = React.createClass({
   getInitialState: function() {
-    return {loadingStatus: BEFORE};
+    return {loadingStatus: BEFORE, boardSize: "" + Config.boardSize.default, gameType: GameHandler.TIME_TYPE, gameTypeValue: "" + GameHandler.defaults[GameHandler.TIME_TYPE]};
   },
   load: function(cb) {
     this.setState({loadingStatus: LOADING});
     Dictionary.load(cb);
   },
-  startGame: function() {
+  onSegControlChange: function(event) {
+    var index = event.nativeEvent.selectedSegmentIndex;
+    this.setState({
+      gameType: index,
+      gameTypeValue: GameHandler.defaults[index]
+    });
+  },
+  validateAndStart() {
+    if (this.state.boardSize.match('^[0-9]+$')) {
+      var val = parseInt(this.state.boardSize);
+      if (!(val >= Config.boardSize.min && val <= Config.boardSize.max)) {
+        var title = "Board size value is invalid";
+        var msg = "Value must be between " + Config.boardSize.min + " and " + Config.boardSize.max;
+        Alert.alert(title, msg);
+        return;
+      }
+    } else {
+      var title = "Board size value is invalid";
+      var msg = "Make sure you've input a valid integer without any white space!";
+      Alert.alert(title, msg);
+      return;
+    }
+    if (this.state.gameTypeValue.match('^[0-9]+$')) {
+      var val = parseInt(this.state.gameTypeValue);
+      if (val >= GameHandler.mins[this.state.gameType] && val <= GameHandler.maxs[this.state.gameType]) {
+          this.startGame(parseInt(this.state.boardSize), new GameHandler.obj(this.state.gameType, val));
+      } else {
+          var title = (this.state.gameType == GameHandler.TIME_TYPE ? "Seconds" : "Points") + " value is invalid";
+          var msg = "Value must be between " + GameHandler.mins[this.state.gameType] + " and " + GameHandler.maxs[this.state.gameType];
+          Alert.alert(title, msg);
+      }
+    } else {
+      var title = (this.state.gameType == GameHandler.TIME_TYPE ? "Seconds" : "Points") + " value is invalid";
+      var msg = "Make sure you've input a valid integer without any white space!";
+      Alert.alert(title, msg);
+    }
+  },
+  startGame: function(boardSize, gameHandler) {
     var that = this;
     this.load(function(err, words) {
       if (err) {
         console.log('dictionary failed to load');
         that.setState({loadingStatus: FAILED});
       } else {
-        var tiles = TileGenerator.generateTiles();
+        var tiles = TileGenerator.generateTiles(boardSize);
         that.state.loadingStatus = SUCCESS;
         that.props.navigator.push({
           component: GameController,
           title: 'Ruzzle',
           passProps: {
-            gameHandler: new GameHandler.obj(GameHandler.types.TIME_TYPE, 120),
+            boardSize: boardSize,
+            gameHandler: gameHandler,
             tiles: tiles
           }
         });
@@ -61,10 +100,35 @@ var MainMenu = React.createClass({
         return (
           <View style={styles.container}>
             <View style={styles.optionsContainer}>
-
+              <View style={styles.option1}>
+                <Text style={{alignSelf: 'center', color: 'white', fontWeight: 'bold'}}>Select the board size:</Text>
+                <TextInput
+                  style={{height: 30, borderColor: 'gray', borderWidth: 2, borderRadius: 5, textAlign: 'center', color: 'white'}}
+                  onChangeText={(text) => this.setState({boardSize: text})}
+                  value={"" + this.state.boardSize}
+                  keyboardType="numeric"
+                />
+              </View>
+              <View style={styles.option2}>
+                <Text style={{alignSelf: 'center', color: 'white', fontWeight: 'bold'}}>Select a game mode:</Text>
+                <SegmentedControlIOS
+                  values={['Time', 'Score']}
+                  selectedIndex={0}
+                  onChange={this.onSegControlChange}
+                  tintColor='white'/>
+              </View>
+              <View style={styles.option3}>
+                <Text style={{color: 'white', fontWeight: 'bold'}}>{this.state.gameType == GameHandler.TIME_TYPE ? 'How many seconds do you want to play for?' : 'How many points do you want to play up to?'}</Text>
+                <TextInput
+                  style={{height: 30, borderColor: 'gray', borderWidth: 2, borderRadius: 5, textAlign: 'center', color: 'white'}}
+                  onChangeText={(text) => this.setState({gameTypeValue: text})}
+                  value={"" + this.state.gameTypeValue}
+                  keyboardType="numeric"
+                />
+              </View>
             </View>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity activeOpacity={0.8} style={styles.startButton} onPress={this.startGame}>
+              <TouchableOpacity activeOpacity={0.7} style={styles.startButton} onPress={this.validateAndStart}>
                 <Text>Play</Text>
               </TouchableOpacity>
             </View>
@@ -80,7 +144,15 @@ var styles = StyleSheet.create({
   },
   optionsContainer: {
     flex: 1,
-    backgroundColor: 'red'
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: 'blue'
+  },
+  option1: {
+    width: 3*Config.screenWidth/4
+  },
+  option2: {
+    width: 3*Config.screenWidth/4
   },
   startButton: {
     height: 50,

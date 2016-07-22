@@ -10,7 +10,7 @@ import Connecter from './Connecter';
 
 var Connecters = React.createClass({
   getInitialState: function() {
-    this.tileSize = (this.props.boardSize - (Config.boardSize+1)*this.props.boardSpace)/Config.boardSize;
+    this.tileSize = (this.props.boardPxSize - (this.props.boardSize+1)*this.props.boardSpace)/this.props.boardSize;
     return {};
   },
   //this will bring you to the leftmost point of the given column
@@ -22,8 +22,8 @@ var Connecters = React.createClass({
     return this.props.boardSpace + (this.tileSize + this.props.boardSpace)*rowIdx;
   },
   getEndPointsFromIndices: function(fromIdx, toIdx) {
-    var startTilePos = Utility.getTileXYFromIdx(fromIdx);
-    var endTilePos = Utility.getTileXYFromIdx(toIdx);
+    var startTilePos = Utility.getTileXYFromIdx(fromIdx, this.props.boardSize);
+    var endTilePos = Utility.getTileXYFromIdx(toIdx, this.props.boardSize);
     var startPos = {}; var endPos = {};
     if (startTilePos.x < endTilePos.x) {
       startPos.x = this.getStartX(startTilePos.x) + this.tileSize;

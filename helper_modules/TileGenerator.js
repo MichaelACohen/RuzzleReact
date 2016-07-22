@@ -54,9 +54,9 @@ var generateConsonant = function() {
   }
 }
 
-var generateLetters = function() {
+var generateLetters = function(boardSize) {
   var letters = []; var vowels = 0;
-  while (letters.length != Config.boardSize * Config.boardSize) {
+  while (letters.length != boardSize * boardSize) {
     var totalLetters = letters.length;
     if (totalLetters == 0) {
       if (Math.random() < 0.5) {
@@ -96,9 +96,9 @@ var shuffle = function(array) {
   return array;
 }
 
-var generateTiles = function() {
+var generateTiles = function(boardSize) {
   var id = 0;
-  var letters = generateLetters();
+  var letters = generateLetters(boardSize);
   var tiles = letters.map(function(letter) {
     return {id: id++, letter: letter};
   })
