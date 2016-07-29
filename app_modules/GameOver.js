@@ -58,8 +58,8 @@ var GameOver = React.createClass({
         style={style}
         onPress={this.onPress(obj.key)}>
         <View style={styles.row}>
-          <Text style={obj.madePoints == 0 ? styles.listText : [styles.listText, styles.made]}>{obj.word} {obj.points}</Text>
           <Text style={obj.madePoints == 0 ? styles.listText : [styles.listText, styles.made]}>{obj.word} {obj.madePoints}</Text>
+          <Text style={obj.madePoints == 0 ? styles.listText : [styles.listText, styles.made]}>{obj.word} {obj.points}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -82,8 +82,8 @@ var GameOver = React.createClass({
           <View style={styles.centerWrapper}>
             <View style={styles.centerContainer}>
               <View style={styles.listViewHeader}>
-                <Text style={{fontWeight: 'bold'}}>{'All words (' + this.data.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')'}</Text>
                 <Text style={{fontWeight: 'bold'}}>{'Your words (' + this.props.stats.madeWords.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')'}</Text>
+                <Text style={{fontWeight: 'bold'}}>{'All words (' + this.data.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')'}</Text>
               </View>
               <View style={styles.listViewContainer}>
                 <View style={styles.listView}>
