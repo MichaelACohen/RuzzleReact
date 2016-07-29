@@ -18,7 +18,7 @@ var load = function(cb) {
       cb(err, words);
     });
   } else {
-    //"fake" the load for 1 second
+    //"fake" the load for 1 second if dictionary is already loaded
     setTimeout(function() {
       cb();
     }, 1000);
