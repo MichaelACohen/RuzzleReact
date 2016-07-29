@@ -76,14 +76,14 @@ var GameOver = React.createClass({
       return (
         <View style={styles.container}>
           <View style={styles.textContainer}>
-            <Text style={styles.text}>{"YOUR SCORE: " + this.props.score}</Text>
-            <Text style={styles.subText}>{"Maximum Score: " + totalPts}</Text>
+            <Text style={styles.text}>{"YOUR SCORE: " + this.props.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
+            <Text style={styles.subText}>{"Maximum Score: " + totalPts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
           </View>
           <View style={styles.centerWrapper}>
             <View style={styles.centerContainer}>
               <View style={styles.listViewHeader}>
-                <Text style={{fontWeight: 'bold'}}>{'All words (' + this.data.length + ')'}</Text>
-                <Text style={{fontWeight: 'bold'}}>{'Your words (' + this.props.stats.madeWords.length + ')'}</Text>
+                <Text style={{fontWeight: 'bold'}}>{'All words (' + this.data.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')'}</Text>
+                <Text style={{fontWeight: 'bold'}}>{'Your words (' + this.props.stats.madeWords.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')'}</Text>
               </View>
               <View style={styles.listViewContainer}>
                 <View style={styles.listView}>

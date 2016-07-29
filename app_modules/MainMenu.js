@@ -30,7 +30,7 @@ var MainMenu = React.createClass({
     var index = event.nativeEvent.selectedSegmentIndex;
     this.setState({
       gameType: index,
-      gameTypeValue: GameHandler.defaults[index]
+      gameTypeValue: "" + GameHandler.defaults[index]
     });
   },
   validateAndStart() {
@@ -108,14 +108,16 @@ var MainMenu = React.createClass({
                   value={"" + this.state.boardSize}
                   keyboardType="numeric"
                 />
+                <Text style={{alignSelf: 'center', color: 'white', fontSize: 10}}>{'*must be between ' + Config.boardSize.min + ' and ' + Config.boardSize.max}</Text>
               </View>
               <View style={styles.option2}>
                 <Text style={{alignSelf: 'center', color: 'white', fontWeight: 'bold'}}>Select a game mode:</Text>
                 <SegmentedControlIOS
                   values={['Time', 'Score']}
-                  selectedIndex={0}
+                  selectedIndex={this.state.gameType}
                   onChange={this.onSegControlChange}
-                  tintColor='white'/>
+                  tintColor='white'
+                />
               </View>
               <View style={styles.option3}>
                 <Text style={{color: 'white', fontWeight: 'bold'}}>{this.state.gameType == GameHandler.TIME_TYPE ? 'How many seconds do you want to play for?' : 'How many points do you want to play up to?'}</Text>
@@ -125,6 +127,7 @@ var MainMenu = React.createClass({
                   value={"" + this.state.gameTypeValue}
                   keyboardType="numeric"
                 />
+                <Text style={{alignSelf: 'center', color: 'white', fontSize: 10}}>{'*must be between ' + GameHandler.mins[this.state.gameType] + ' and ' + GameHandler.maxs[this.state.gameType]}</Text>
               </View>
             </View>
             <View style={styles.buttonContainer}>
