@@ -82,8 +82,8 @@ var GameController = React.createClass({
   onWordSubmit: function() {
     var tiles = this.getSelectedTiles();
     var word = this.getSelectedWord();
-    var res = WordHandler.madeWordFromTiles(tiles);
-    if (res == WordHandler.VALID) {
+    var submittedWordResponse = WordHandler.submittedWordFromTiles(tiles);
+    if (submittedWordResponse == WordHandler.VALID) {
       var curPoints = this.state.curScore;
       var pointsFromWord = Utility.getPointsFromTiles(tiles);
       this.stats.madeWord(word, pointsFromWord);
@@ -91,21 +91,21 @@ var GameController = React.createClass({
       if (this.gameHandler.isGameOver({points: curPoints + pointsFromWord})) {
         this.setGameOver();
       }
-    } else if (res == WordHandler.ALREADY_USED) {
-
-    } else { //res == WordHandler.NOT_WORD
+    } else if (submittedWordResponse == WordHandler.ALREADY_USED) {
+      //TODO: do something here
+    } else { //not a word
       this.stats.incorrectAttempt();
     }
     this.setState({selected: []});
   },
-  increasePointsBy: function(points) {
+  increasePointsBy: function(points, delay) {
     //if there is already a score increase happening, make it finish
     if (this.scoreInterval) {
       clearInterval(this.scoreInterval);
       this.setState({curScore: this.toPoints});
     }
     this.toPoints = this.state.curScore + points;
-    var DELAY = 50;
+    var DELAY = delay || 50;
     var that = this;
     this.scoreInterval = setInterval(function() {
       if (points == 0) clearInterval(that.scoreInterval);
@@ -122,7 +122,7 @@ var GameController = React.createClass({
           <HUD gameHandler={this.gameHandler} secondsPassed={this.state.secondsPassed} tiles={this.state.tiles} selected={this.state.selected} curScore={this.state.curScore}/>
           <SubmitButton onPress={this.onWordSubmit}/>
           <Board pxSize={Config.screenWidth} boardSize={this.boardSize} space={this.boardSize <= 10 ? 24 - 2*this.boardSize : 4} tiles={this.state.tiles} selected={this.state.selected} onTilePress={this.onTilePress}/>
-          <View style={{flex: 1, backgroundColor: 'black'}}></View>
+          <View style={styles.bottomContainer}></View>
         </View>
       );
     } else {
@@ -139,6 +139,10 @@ var styles = StyleSheet.create({
   },
   vContainer: {
     flexDirection: 'column'
+  },
+  bottomContainer: {
+    flex: 1,
+    backgroundColor: 'black'
   }
 });
 

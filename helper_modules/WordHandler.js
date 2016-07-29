@@ -3,7 +3,7 @@ import Dictionary from './dictionary';
 var ALREADY_USED = 0, VALID = 1, NOT_WORD = 2;
 var madeWords = [];
 
-var madeWord = function(word) {
+var submittedWord = function(word) {
   word = word.toLowerCase();
   if (!Dictionary.isWord(word)) return NOT_WORD;
   if (madeWords.indexOf(word) !== -1) return ALREADY_USED;
@@ -11,16 +11,16 @@ var madeWord = function(word) {
   return VALID;
 };
 
-var madeWordFromTiles = function(tiles) {
+var submittedWordFromTiles = function(tiles) {
   var word = tiles.map(function(tile) {
     return tile.letter;
   }).join('');
-  return madeWord(word);
+  return submittedWord(word);
 }
 
 module.exports = {
-  madeWord: madeWord,
-  madeWordFromTiles: madeWordFromTiles,
+  submittedWord: submittedWord,
+  submittedWordFromTiles: submittedWordFromTiles,
   ALREADY_USED: ALREADY_USED,
   VALID: VALID,
   NOT_WORD: NOT_WORD
