@@ -64,6 +64,7 @@ var MainMenu = React.createClass({
     }
   },
   startGame: function(boardSize, gameHandler) {
+    console.log("start");
     var that = this;
     this.load(function(err, words) {
       if (err) {
@@ -100,18 +101,18 @@ var MainMenu = React.createClass({
         return (
           <View style={styles.container}>
             <View style={styles.optionsContainer}>
-              <View style={styles.option1}>
-                <Text style={{alignSelf: 'center', color: 'white', fontWeight: 'bold'}}>Select the board size:</Text>
+              <View style={styles.option}>
+                <Text style={[styles.optionText, styles.optionTopText]}>Select the board size:</Text>
                 <TextInput
-                  style={{height: 30, borderColor: 'gray', borderWidth: 2, borderRadius: 5, textAlign: 'center', color: 'white'}}
+                  style={styles.textInput}
                   onChangeText={(text) => this.setState({boardSize: text})}
                   value={"" + this.state.boardSize}
                   keyboardType="numeric"
                 />
-                <Text style={{alignSelf: 'center', color: 'white', fontSize: 10}}>{'*must be between ' + Config.boardSize.min + ' and ' + Config.boardSize.max}</Text>
+                <Text style={[styles.optionText, styles.optionCaptionText]}>{'*must be between ' + Config.boardSize.min + ' and ' + Config.boardSize.max}</Text>
               </View>
-              <View style={styles.option2}>
-                <Text style={{alignSelf: 'center', color: 'white', fontWeight: 'bold'}}>Select a game mode:</Text>
+              <View style={styles.option}>
+                <Text style={[styles.optionText, styles.optionTopText]}>Select a game mode:</Text>
                 <SegmentedControlIOS
                   values={['Time', 'Score']}
                   selectedIndex={this.state.gameType}
@@ -120,18 +121,18 @@ var MainMenu = React.createClass({
                 />
               </View>
               <View style={styles.option3}>
-                <Text style={{color: 'white', fontWeight: 'bold'}}>{this.state.gameType == GameHandler.TIME_TYPE ? 'How many seconds do you want to play for?' : 'How many points do you want to play up to?'}</Text>
+                <Text style={[styles.optionText, styles.optionTopText]}>{this.state.gameType == GameHandler.TIME_TYPE ? 'How many seconds do you want to play for?' : 'How many points do you want to play up to?'}</Text>
                 <TextInput
-                  style={{height: 30, borderColor: 'gray', borderWidth: 2, borderRadius: 5, textAlign: 'center', color: 'white'}}
+                  style={styles.textInput}
                   onChangeText={(text) => this.setState({gameTypeValue: text})}
                   value={"" + this.state.gameTypeValue}
                   keyboardType="numeric"
                 />
-                <Text style={{alignSelf: 'center', color: 'white', fontSize: 10}}>{'*must be between ' + GameHandler.mins[this.state.gameType] + ' and ' + GameHandler.maxs[this.state.gameType]}</Text>
+                <Text style={[styles.optionText, styles.optionCaptionText]}>{'*must be between ' + GameHandler.mins[this.state.gameType] + ' and ' + GameHandler.maxs[this.state.gameType]}</Text>
               </View>
             </View>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity activeOpacity={0.7} style={styles.startButton} onPress={this.validateAndStart}>
+            <View>
+              <TouchableOpacity activeOpacity={0.6} style={styles.startButton} onPress={this.validateAndStart}>
                 <Text>Play</Text>
               </TouchableOpacity>
             </View>
@@ -151,11 +152,26 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'blue'
   },
-  option1: {
+  option: {
     width: 3*Config.screenWidth/4
   },
-  option2: {
-    width: 3*Config.screenWidth/4
+  optionText: {
+    alignSelf: 'center',
+    color: 'white'
+  },
+  optionTopText: {
+    fontWeight: 'bold'
+  },
+  optionCaptionText: {
+    fontSize: 10
+  },
+  textInput: {
+    height: 30,
+    borderColor: 'gray',
+    borderWidth: 2,
+    borderRadius: 5,
+    textAlign: 'center',
+    color: 'white'
   },
   startButton: {
     height: 50,
