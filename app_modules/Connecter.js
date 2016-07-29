@@ -3,8 +3,6 @@ import {
   Line
 } from 'react-native-svg';
 
-import Config from './../config';
-
 var Connecter = React.createClass({
   render: function() {
     return (
