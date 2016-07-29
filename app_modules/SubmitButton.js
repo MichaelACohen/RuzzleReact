@@ -10,7 +10,7 @@ import Config from './../config';
 var SubmitButton = React.createClass({
   render: function() {
     return (
-      <TouchableOpacity activeOpacity={0.4} style={styles.button} onPress={this.props.onPress}>
+      <TouchableOpacity activeOpacity={0.6} style={styles.button} onPress={this.props.onPress}>
         <Text style={styles.text}>{'Submit Word'}</Text>
       </TouchableOpacity>
     );
