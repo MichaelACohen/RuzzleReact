@@ -46,8 +46,6 @@ var GameOver = React.createClass({
       that.setState({dataSource: ds.cloneWithRows(data), selected: idx});
     };
   },
-  //obj has 3 properties: word, points, madePoints
-  //points is max amount of points made with word, madePoints is amount of points player made
   renderRow: function(obj) {
     var style = [];
     if (obj.key == this.state.selected) style.push(styles.highlighted);
@@ -80,10 +78,10 @@ var GameOver = React.createClass({
             <Text style={styles.subText}>{"Maximum Score: " + totalPts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
           </View>
           <View style={styles.centerWrapper}>
-            <View style={styles.centerContainer}>
+            <View>
               <View style={styles.listViewHeader}>
-                <Text style={{fontWeight: 'bold'}}>{'Your words (' + this.props.stats.madeWords.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')'}</Text>
-                <Text style={{fontWeight: 'bold'}}>{'All words (' + this.data.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')'}</Text>
+                <Text style={styles.boldText}>{'Your words (' + this.props.stats.madeWords.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')'}</Text>
+                <Text style={styles.boldText}>{'All words (' + this.data.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')'}</Text>
               </View>
               <View style={styles.listViewContainer}>
                 <View style={styles.listView}>
@@ -96,8 +94,8 @@ var GameOver = React.createClass({
           </View>
           <View style={styles.bottomContainer}>
             <View style={styles.bottomDetailContainer}>
-              <Text numberOfLines={1} style={{color: 'white'}}>{selectedData.madePoints == 0 ? "" : "You made this word!"}</Text>
-              <Text style={{color: 'white'}}>{selectedData.word}: {selectedData.points} points</Text>
+              <Text numberOfLines={1} style={styles.bottomDetailText}>{selectedData.madePoints == 0 ? "" : "You made this word!"}</Text>
+              <Text style={styles.bottomDetailText}><Text style={styles.boldText}>{selectedData.word}</Text>: {selectedData.points} points</Text>
             </View>
             <View style={styles.boardContainer}>
               <Board pxSize={Config.screenHeight/4} boardSize={this.props.boardSize} space={this.props.boardSize <= 5 ? 12 - 2*this.props.boardSize : 2} tiles={this.props.tiles} selected={selectedData.tiles}/>
@@ -156,9 +154,6 @@ var styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10
   },
-  madeRow: {
-
-  },
   highlighted: {
     backgroundColor: 'rgba(255, 255, 0, 0.75)'
   },
@@ -180,9 +175,15 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  bottomDetailText: {
+    color: 'white'
+  },
   boardContainer: {
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  boldText: {
+    fontWeight: 'bold'
   }
 });
 
