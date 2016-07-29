@@ -4,7 +4,6 @@ import {
 } from 'react-native';
 import Svg from 'react-native-svg';
 
-import Config from './../config';
 import Utility from './../helper_modules/Utility';
 import Connecter from './Connecter';
 
